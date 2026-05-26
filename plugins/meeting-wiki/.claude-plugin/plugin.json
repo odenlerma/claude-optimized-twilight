@@ -1,0 +1,9 @@
+{
+  "name": "meeting-wiki",
+  "description": "Turn meeting transcripts into an evolving, interlinked markdown wiki — people, projects, topics, decisions, and action items kept up to date by Claude.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  }
+}

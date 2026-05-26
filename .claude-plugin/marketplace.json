@@ -1,9 +1,19 @@
 {
   "name": "claude-optimized-twilight",
   "description": "Personal Claude Code plugin marketplace",
+  "metadata": {
+    "description": "Anthropic example skills",
+    "version": "2.0.0"
+  },
   "owner": {
     "name": "Audruey Gana",
     "email": "audruey.gana@legalmatch.com"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "meeting-wiki",
+      "source": "./plugins/meeting-wiki",
+      "description": "Turn meeting transcripts into an evolving, interlinked markdown wiki — people, projects, topics, decisions, and action items kept up to date by Claude."
+    }
+  ]
 }
