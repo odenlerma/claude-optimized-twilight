@@ -33,6 +33,7 @@ Steps:
    ```
    Preserve the existing JSON formatting.
 7. Run `claude plugin validate .` from the repo root. If it errors, fix and re-run.
-8. Report what was created (file tree + next steps for filling in component files).
+8. Update `README.md` — add a section for `$ARGUMENTS` under the plugins list: one-line description, install line, usage, dependencies. Caveman lite (authoring Rule 7).
+9. Report what was created (file tree + next steps for filling in component files).
 
 Do not commit — leave the changes staged so the user can review first.

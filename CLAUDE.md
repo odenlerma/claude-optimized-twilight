@@ -16,8 +16,10 @@ This repo is a Claude Code **plugin marketplace** catalog. Docs: https://docs.cl
 ## Conventions
 
 - **Plugin names** are kebab-case (lowercase letters, digits, hyphens). Claude.ai marketplace sync rejects other forms.
+- **Unique names** — every plugin, skill, command, and agent name must be unique across the catalog. Duplicates cause trigger collisions and shadow users' other plugins. Prefer namespaced names (`wiki-ingest`, not `ingest`).
 - **Source paths** in `marketplace.json` start with `./` and resolve from the marketplace root (not from `.claude-plugin/`). Never use `../`.
 - **`version`** in `plugin.json` must be bumped on every release. If the field is unchanged, Claude Code treats the plugin as cached and skips updates for existing users.
+- **`metadata.version`** in `marketplace.json` must also be bumped on every plugin change (any add, edit, or release of a plugin under `plugins/`). Use semver: patch for plugin patches/edits, minor for plugin minor bumps or new plugins, major for plugin major bumps or breaking catalog changes. The `/release` command handles this automatically.
 - Do not set `version` in both `plugin.json` and the marketplace entry — `plugin.json` silently wins.
 - Use `${CLAUDE_PLUGIN_ROOT}` (not relative paths) inside hooks/MCP configs to reference files in the plugin's install dir, since plugins are copied to a cache location.
 
@@ -30,6 +32,8 @@ This repo is a Claude Code **plugin marketplace** catalog. Docs: https://docs.cl
 Adding a plugin: prefer the `/add-plugin <name>` slash command in this repo, which scaffolds the directory, plugin.json, and marketplace entry in one step.
 
 Editing a plugin: bump `version` in its `plugin.json` before committing if behavior changed.
+
+Adding or editing a plugin: update `README.md` (install, usage, dependencies) in the same change. Caveman lite.
 
 Always run `/validate` before committing changes to `marketplace.json` or any `plugin.json`.
 
