@@ -1,0 +1,9 @@
+{
+  "name": "claude-optimized-twilight",
+  "description": "Personal Claude Code plugin marketplace",
+  "owner": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  },
+  "plugins": []
+}
