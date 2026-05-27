@@ -1,0 +1,11 @@
+{
+  "$schema": "https://www.skills.sh/schema/skills.sh.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Meeting Wiki",
+      "description": "Turn meeting transcripts into a linked wiki and Jira drafts.",
+      "skills": ["wiki-maintainer", "jira-ticketize"]
+    }
+  ]
+}

@@ -42,3 +42,12 @@ Always run `/validate` before committing changes to `marketplace.json` or any `p
 Local: `/plugin marketplace add /Users/audrueygana/Desktop/projects/claude-optimized-twilight`
 
 After pushing to GitHub: `/plugin marketplace add <owner>/claude-optimized-twilight`
+
+## skills.sh distribution
+
+Skills also distribute through [skills.sh](https://www.skills.sh) via the open `skills` CLI (`npx skills`). Listing is **automatic and telemetry-driven** — no submission. Repo gets ranked once anyone runs `npx skills add odenlerma/claude-optimized-twilight`.
+
+- CLI discovers skills under `.agents/skills/<name>/`, `.claude/skills/<name>/`, and `plugins/<plugin>/skills/<name>/` (via `.claude-plugin` manifest). Each needs `SKILL.md` with non-empty `name` + `description` frontmatter, else CLI skips it.
+- `skills.sh.json` at repo root customizes grouping on the skills.sh page. Group this marketplace's own plugin skills; leave vendored `.agents/skills/` skills ungrouped.
+- Authoring rules: [`.claude/rules/skills-distribution.md`](.claude/rules/skills-distribution.md).
+- Preview discoverable skills (no install): `npx skills add . --list`. `/validate` runs this check.

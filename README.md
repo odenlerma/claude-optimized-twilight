@@ -47,7 +47,14 @@ Push repo to GitHub. Open plugin/marketplace settings, add the marketplace by Gi
 npx skills add odenlerma/claude-optimized-twilight
 ```
 
-This installs skills (e.g. `wiki-maintainer`, `jira-ticketize`) — they auto-trigger by phrase.
+This installs all discoverable skills — they auto-trigger by phrase:
+
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`
+- Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
+
+Preview without installing: `npx skills add . --list`.
+
+**Listing on skills.sh** happens automatically — the [skills.sh](https://www.skills.sh) leaderboard is telemetry-driven, so the repo gets indexed on first `npx skills add`. The page is grouped via [`skills.sh.json`](skills.sh.json) (plugin skills grouped; vendored skills fall under "Other skills").
 
 **Caveat:** `npx skills` brings **skills only** — not `/wiki-*` slash commands or hooks. For full plugin (commands included), use the `/plugin marketplace add` path above.
 
@@ -69,6 +76,8 @@ Turn meeting transcripts into an evolving, interlinked markdown wiki — people,
 Skills: `wiki-maintainer` (all wiki ops), `jira-ticketize` (transcript → Jira drafts).
 
 Usage: `/wiki-init` once, then `/wiki-ingest path/to/transcript.txt` per meeting. Ask `/wiki-query "what did we decide on auth?"`. Review the diff, commit yourself.
+
+**Obsidian-ready.** Wiki output is plain markdown with `[[wikilinks]]`, YAML frontmatter properties, and `- [ ]` task checkboxes — Obsidian reads it natively. Optional: download Obsidian at https://obsidian.md/download and point a vault at the generated `wiki/` folder to browse pages, backlinks, and tasks. No Obsidian config files are generated; the plugin stays a git-backed markdown wiki.
 
 ## Dependencies
 

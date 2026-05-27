@@ -25,3 +25,6 @@ Adding or editing any plugin under `plugins/` requires updating `README.md` in s
 
 ## 8. Names must be unique
 Every plugin, skill, command, and agent name unique across whole marketplace. No two tools share a name. Duplicate names cause trigger collisions and shadow users' other installed plugins. Prefer descriptive, namespaced names (`wiki-ingest`, not `ingest`).
+
+## 9. Skills must be skills.sh-discoverable
+Every skill needs valid `SKILL.md` frontmatter (`name` + `description`) and a CLI-discoverable path, and plugin skills must be grouped in root `skills.sh.json`. See [`.claude/rules/skills-distribution.md`](skills-distribution.md). Verify with `npx skills add . --list`.

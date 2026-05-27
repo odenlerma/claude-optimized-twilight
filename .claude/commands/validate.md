@@ -11,6 +11,18 @@ Validate marketplace + run plugin-quality review. Optional `$ARGUMENTS` = single
 2. If `$ARGUMENTS` empty: for each subdir under `plugins/` containing `.claude-plugin/plugin.json`, run `claude plugin validate ./plugins/<name>`. If `$ARGUMENTS` set: run only `claude plugin validate ./plugins/$ARGUMENTS` (stop if dir missing).
 3. Collect errors/warnings, keyed by file.
 
+## Phase 1b — skills.sh discoverability
+
+Confirm every authored skill is visible to `npx skills` (skills.sh distribution). See `.claude/rules/skills-distribution.md`.
+
+1. If `npx` or `skills` unavailable → warn, skip phase (graceful, like other external-dependency gaps). Don't fail.
+2. Run `npx skills add . --list` from repo root. `--list` previews discovered skills; no install.
+3. Build expected set: every `SKILL.md` under `.agents/skills/`, `.claude/skills/`, and `plugins/*/skills/`, keyed by frontmatter `name`.
+4. Diff expected vs CLI output. Each expected skill missing from `--list` → finding: `<skill-path> — skills.sh — not discovered by npx skills — fix frontmatter/path`.
+5. Flag any `SKILL.md` with missing/empty `name` or `description` frontmatter.
+6. If `skills.sh.json` present: flag any grouped name not in discovered set (stale grouping). Don't flag discovered-but-ungrouped skills — vendored `.agents/skills/` ones intentionally land in "Other skills". Note (not error) any `plugins/*/skills/` skill absent from every group.
+7. Findings feed Phase 3 fix loop and Phase 4 report.
+
 ## Phase 2 — Plugin quality review
 
 Load `.claude/rules/plugin-authoring.md` once. For each plugin in scope, walk every file under `plugins/<name>/{skills,commands,agents,hooks,mcp}/` and check:
@@ -47,7 +59,7 @@ Each finding = one line: `<file>:<line-or-section> — <rule/category> — <one-
 
 ## Phase 3 — Fix loop
 
-Combine Phase 1 + Phase 2 findings.
+Combine Phase 1 + Phase 1b + Phase 2 findings.
 
 1. If zero issues, skip to Phase 4.
 2. Group issues by file. For each group, show issues and ask user via `AskUserQuestion`:
@@ -56,13 +68,14 @@ Combine Phase 1 + Phase 2 findings.
    - `Skip this file` — leave as-is this iteration
    - `Abort loop` — exit loop, jump to Phase 4 with current state
 3. Apply approved fixes with Edit tool.
-4. Re-run Phase 1 + Phase 2 on the affected scope.
+4. Re-run Phase 1 + Phase 1b + Phase 2 on the affected scope.
 5. Loop. Cap at **5 iterations**. If not clean after 5, stop and report remaining.
 6. If user picks `Abort loop`, exit immediately and report.
 
 ## Phase 4 — Final report
 
 - Targets validated (catalog + plugin list).
+- skills.sh discoverability: `N/N skills discoverable` (or `skipped — npx skills unavailable`).
 - Issues found / fixed / remaining, broken down by phase.
 - Iteration count.
 - If clean: `0 issues — plugin ready.`
