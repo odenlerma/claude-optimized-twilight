@@ -6,6 +6,11 @@
       "title": "Meeting Wiki",
       "description": "Turn meeting transcripts into a linked wiki and Jira drafts.",
       "skills": ["wiki-maintainer", "jira-ticketize"]
+    },
+    {
+      "title": "Feature QA",
+      "description": "Manual QA from Jira tickets — plan, run with screenshot evidence, report.",
+      "skills": ["qa-test-plan", "qa-execute", "qa-jira-report"]
     }
   ]
 }
