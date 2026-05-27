@@ -1,7 +1,7 @@
 {
   "name": "plugin-creator",
   "description": "Author Claude Code plugin marketplaces — scaffold plugins, enforce authoring rules, validate the catalog (schema + skills.sh discoverability), and bump/release versions.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Audruey Gana",
     "email": "audruey.gana@legalmatch.com"
