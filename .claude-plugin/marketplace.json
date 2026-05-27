@@ -3,7 +3,7 @@
   "description": "Personal Claude Code plugin marketplace",
   "metadata": {
     "description": "Anthropic example skills",
-    "version": "3.0.0"
+    "version": "4.0.0"
   },
   "owner": {
     "name": "Audruey Gana",
@@ -19,6 +19,11 @@
       "name": "plugin-creator",
       "source": "./plugins/plugin-creator",
       "description": "Author Claude Code plugin marketplaces — scaffold plugins, enforce authoring rules, validate the catalog (schema + skills.sh discoverability), and bump/release versions."
+    },
+    {
+      "name": "feature-qa",
+      "source": "./plugins/feature-qa",
+      "description": "Generate MANUAL-only QA test plans and execute them to satisfy Jira ticket requirements without breaking existing features; capture evidence and comment test results."
     }
   ]
 }

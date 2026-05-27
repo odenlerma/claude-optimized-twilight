@@ -1,0 +1,9 @@
+{
+  "name": "feature-qa",
+  "description": "Generate MANUAL-only QA test plans and execute them to satisfy Jira ticket requirements without breaking existing features; capture evidence and comment test results.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  }
+}

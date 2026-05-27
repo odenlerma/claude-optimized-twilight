@@ -42,7 +42,7 @@ npx skills add odenlerma/claude-optimized-twilight
 
 This installs all discoverable skills — they auto-trigger by phrase:
 
-- Plugin skills: `wiki-maintainer`, `jira-ticketize`
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`
 - Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
 
 Preview without installing: `npx skills add . --list`.
@@ -87,6 +87,20 @@ Bundled rules: `plugin-authoring.md` (9 rules), `skills-distribution.md` (skills
 
 Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fill in components, `/validate` before commit, `/release my-plugin minor` to ship.
 
+### feature-qa
+
+**MANUAL-only** QA driven by a Jira ticket. Fetch requirements, study the codebase, build a test plan, run it by hand through a browser MCP with screenshot evidence, write a plain-language pass/fail report, post results to the ticket — only when everything passes, and only after you confirm.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/feature-qa` | `<jira-ticket-number>` | Full flow: build plan → run with evidence → report on pass |
+
+Skills: `qa-test-plan` (ticket → plan: positive, negative, regression, what-if), `qa-execute` (run by hand, screenshot per scenario, pass/fail report), `qa-jira-report` (post result to ticket on pass, confirm-gated).
+
+Usage: `/feature-qa PROJ-123`. Plan written to `qa-reports/PROJ-123/test-plan.md`, screenshots + report to `qa-reports/PROJ-123/`. Any failed scenario or logged issue → verdict FAIL, nothing posted. PASS → comment drafted, you confirm, then posted.
+
+All external access detected dynamically by tool **description** (not name) and gated: no Jira MCP → paste ticket details / paste-ready comment; no browser MCP → stops (manual QA needs one for evidence).
+
 ## Dependencies
 
 ### meeting-wiki
@@ -102,6 +116,13 @@ Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fil
 - **`npx` + `skills`** — *optional*, for skills.sh discoverability check in `/validate` Phase 1b. Missing → phase skips gracefully.
 - **git** — for `/release` commit and staging.
 - Commands assume a marketplace repo layout (`.claude-plugin/marketplace.json`, `plugins/`). No env vars, no API keys.
+
+### feature-qa
+
+- **Browser-automation MCP** — *required* for `qa-execute`. Manual QA drives the app and screenshots evidence through it (e.g. Playwright MCP). Detected by tool description; supply via your own config. Missing → `qa-execute` stops.
+- **Jira MCP server** — *optional*, for reading ticket requirements and posting result comments. Without it, supply requirements manually and paste results. Detected by tool description; wire via your own config.
+- **git** — recommended, for versioning `qa-reports/` evidence artifacts.
+- No env vars, no API keys, no inline secrets (authoring Rules 1–2).
 
 ## Troubleshooting
 
