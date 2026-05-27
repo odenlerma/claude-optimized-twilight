@@ -79,6 +79,21 @@ Usage: `/wiki-init` once, then `/wiki-ingest path/to/transcript.txt` per meeting
 
 **Obsidian-ready.** Wiki output is plain markdown with `[[wikilinks]]`, YAML frontmatter properties, and `- [ ]` task checkboxes — Obsidian reads it natively. Optional: download Obsidian at https://obsidian.md/download and point a vault at the generated `wiki/` folder to browse pages, backlinks, and tasks. No Obsidian config files are generated; the plugin stays a git-backed markdown wiki.
 
+### plugin-creator
+
+Author Claude Code plugin marketplaces. Bundles the four workflow commands plus both authoring-rule docs, so any marketplace repo gets the same scaffolding, validation, and release flow. Self-contained — commands read rules from `${CLAUDE_PLUGIN_ROOT}/rules/`.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/add-plugin` | `<plugin-name>` | Scaffold plugin dir, `plugin.json`, catalog entry, README section |
+| `/plugin-authoring` | — | Load authoring rules; enforce on all plugin work this session |
+| `/validate` | `[plugin-name]` | Validate catalog (schema + skills.sh discoverability) + plugin-quality review |
+| `/release` | `<plugin-name> <major\|minor\|patch>` | Bump plugin + marketplace versions, commit |
+
+Bundled rules: `plugin-authoring.md` (9 rules), `skills-distribution.md` (skills.sh discoverability).
+
+Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fill in components, `/validate` before commit, `/release my-plugin minor` to ship.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -87,6 +102,13 @@ Usage: `/wiki-init` once, then `/wiki-ingest path/to/transcript.txt` per meeting
 - **Transcript files** — `.txt`, `.md`, `.vtt`, `.srt` (Zoom, Granola, Otter, Google Meet).
 - **Jira MCP server** — *optional*, only for `/wiki-ticketize` auto-create. Without it, plugin prints paste-ready ticket drafts. Plugin detects the MCP by tool description, supply it via your own config.
 - No env vars, no API keys, no setup scripts.
+
+### plugin-creator
+
+- **`claude` CLI** — for `claude plugin validate` (schema validation in `/validate` and `/release`).
+- **`npx` + `skills`** — *optional*, for skills.sh discoverability check in `/validate` Phase 1b. Missing → phase skips gracefully.
+- **git** — for `/release` commit and staging.
+- Commands assume a marketplace repo layout (`.claude-plugin/marketplace.json`, `plugins/`). No env vars, no API keys.
 
 ## Troubleshooting
 

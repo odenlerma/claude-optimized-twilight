@@ -3,7 +3,7 @@
   "description": "Personal Claude Code plugin marketplace",
   "metadata": {
     "description": "Anthropic example skills",
-    "version": "2.0.0"
+    "version": "3.0.0"
   },
   "owner": {
     "name": "Audruey Gana",
@@ -14,6 +14,11 @@
       "name": "meeting-wiki",
       "source": "./plugins/meeting-wiki",
       "description": "Turn meeting transcripts into an evolving, interlinked markdown wiki — people, projects, topics, decisions, and action items kept up to date by Claude."
+    },
+    {
+      "name": "plugin-creator",
+      "source": "./plugins/plugin-creator",
+      "description": "Author Claude Code plugin marketplaces — scaffold plugins, enforce authoring rules, validate the catalog (schema + skills.sh discoverability), and bump/release versions."
     }
   ]
 }
