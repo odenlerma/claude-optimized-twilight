@@ -2,17 +2,10 @@
 
 Personal Claude Code **plugin marketplace**. Drop-in plugins — skills, slash commands, agents — you install once and use across projects. Built on Claude Code's marketplace system. Docs: https://docs.claude.com/en/docs/claude-code/marketplaces
 
-Repo: https://github.com/odenlerma/claude-optimized-twilight
 
 ## Install
 
 ### Claude Code (CLI, desktop, IDE)
-
-Local clone:
-
-```
-/plugin marketplace add /Users/audrueygana/Desktop/projects/claude-optimized-twilight
-```
 
 After pushing to GitHub:
 
