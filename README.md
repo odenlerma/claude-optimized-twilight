@@ -120,7 +120,7 @@ All external access detected dynamically by tool **description** (not name) and 
 ### feature-qa
 
 - **Browser-automation MCP** — *required* for `qa-execute`. Manual QA drives the app and screenshots evidence through it (e.g. Playwright MCP). Detected by tool description; supply via your own config. Missing → `qa-execute` stops.
-- **Jira MCP server** — *optional*, for reading ticket requirements and posting result comments. Without it, supply requirements manually and paste results. Detected by tool description; wire via your own config.
+- **Jira MCP servers** — *optional*: reader (fetch ticket), comment-add (post result), attachment-upload (inline screenshots in posted comment). Missing reader → paste ticket details. Missing comment-add or attachment-upload → paste-ready comment + manual-attach list. Detected by tool description; wire via your own config.
 - **git** — recommended, for versioning `qa-reports/` evidence artifacts.
 - No env vars, no API keys, no inline secrets (authoring Rules 1–2).
 
