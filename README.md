@@ -42,7 +42,7 @@ npx skills add odenlerma/claude-optimized-twilight
 
 This installs all discoverable skills — they auto-trigger by phrase:
 
-- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`
 - Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
 
 Preview without installing: `npx skills add . --list`.
@@ -101,6 +101,20 @@ Usage: `/feature-qa PROJ-123`. Plan written to `qa-reports/PROJ-123/test-plan.md
 
 All external access detected dynamically by tool **description** (not name) and gated: no Jira MCP → paste ticket details / paste-ready comment; no browser MCP → stops (manual QA needs one for evidence).
 
+### feature-code-review
+
+Unbiased, **impact-driven** code review driven by a Jira ticket. Fetch the feature intent, scope the change (git diff vs base, widened to related code), review across seven impact dimensions, write a verdict report, post to the ticket — only on PASS, and only after you confirm. Skips per-line nits and generic by-the-book standards; focuses on usability, readability, and real impact.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/feature-code-review` | `<jira-ticket-number>` | Full flow: scope change → review by impact → report on pass |
+
+Skills: `cr-scope` (ticket → intent + change inventory: diff + related context), `cr-review` (review by dimension — performance, security, responsiveness, error handling, UX, reusable components, structure; verdict PASS / CHANGES REQUESTED), `cr-jira-report` (post result to ticket on pass, confirm-gated).
+
+Usage: `/feature-code-review PROJ-123`. Scope written to `code-reviews/PROJ-123/scope.md`, review to `code-reviews/PROJ-123/review.md`. Any Blocker or Major finding → verdict CHANGES REQUESTED, nothing posted. PASS → comment drafted, you confirm, then posted.
+
+All external access detected dynamically by tool **description** (not name) and gated: no Jira reader MCP → paste ticket details; no comment MCP → paste-ready comment.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -123,6 +137,12 @@ All external access detected dynamically by tool **description** (not name) and 
 - **Jira MCP servers** — *optional*: reader (fetch ticket), comment-add (post result), attachment-upload (inline screenshots in posted comment). Missing reader → paste ticket details. Missing comment-add or attachment-upload → paste-ready comment + manual-attach list. Detected by tool description; wire via your own config.
 - **git** — recommended, for versioning `qa-reports/` evidence artifacts.
 - No env vars, no API keys, no inline secrets (authoring Rules 1–2).
+
+### feature-code-review
+
+- **git** — *required* for `cr-scope` diff. Reviews the feature branch diff vs a base branch; falls back to locating feature files if no diff/branch exists.
+- **Jira MCP servers** — *optional*: reader (fetch ticket intent), comment-add (post result on pass). Missing reader → paste ticket details. Missing comment-add → paste-ready comment. Detected by tool description; wire via your own config.
+- No browser MCP needed — review is static (code vs intent). No env vars, no API keys, no inline secrets (authoring Rules 1–2).
 
 ## Troubleshooting
 

@@ -11,6 +11,11 @@
       "title": "Feature QA",
       "description": "Manual QA from Jira tickets — plan, run with screenshot evidence, report.",
       "skills": ["qa-test-plan", "qa-execute", "qa-jira-report"]
+    },
+    {
+      "title": "Feature Code Review",
+      "description": "Impact-driven code review from Jira tickets — scope the change, review by impact, report on pass.",
+      "skills": ["cr-scope", "cr-review", "cr-jira-report"]
     }
   ]
 }
