@@ -25,9 +25,9 @@ Build manual QA test plan for a Jira ticket. Stay curious — ask when unclear. 
 
 ### 1. Resolve ticket
 
-Take `$ARGUMENTS` as Jira ticket number/key. Empty → ask once: `Jira ticket number?` Stop until provided.
+First whitespace-delimited token of `$ARGUMENTS` = Jira ticket number/key. Remaining text (optional) = free-text **notes**: extra context to factor into this plan (focus areas, constraints, scope). No ticket → ask once: `Jira ticket number?` Stop until provided.
 
-Slug `<TICKET>` = the ticket key (e.g. `PROJ-123`). All output lives under `qa-reports/<TICKET>/`.
+Slug `<TICKET>` = the ticket key (e.g. `PROJ-123`), notes excluded. All output lives under `qa-reports/<TICKET>/`.
 
 ### 2. Detect Jira reader tool
 
@@ -84,6 +84,8 @@ Cover four scenario kinds:
 
 Each scenario: one line, plain words, what a tester does + what should happen. No technical terms.
 
+Notes present → factor them into scenario selection (focus area named → weight those scenarios; scope limit named → respect it).
+
 ### 7. Write plan
 
 Write `qa-reports/<TICKET>/test-plan.md`:
@@ -92,6 +94,9 @@ Write `qa-reports/<TICKET>/test-plan.md`:
 # QA test plan — <TICKET>
 
 Requirement: <one-line plain summary>
+
+## Notes
+- (none) | - <user-supplied notes>
 
 ## Positive
 1. <do this> → <should see this>

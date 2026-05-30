@@ -1,11 +1,11 @@
 ---
 description: Run manual QA for a Jira ticket — build a test plan, execute it with screenshot evidence, post results on pass
-argument-hint: <jira-ticket-number>
+argument-hint: <jira-ticket-number> [notes]
 ---
 
-Run full manual QA for Jira ticket `$ARGUMENTS`.
+Run full manual QA for Jira ticket in `$ARGUMENTS`.
 
-`$ARGUMENTS` empty → ask once: `Jira ticket number?` Stop until provided.
+First token of `$ARGUMENTS` = Jira ticket key. Remaining text (optional) = free-text notes — extra context to factor into QA (focus areas, constraints, scope). No ticket → ask once: `Jira ticket number?` Stop until provided.
 
 Run these skills in order for the ticket:
 
@@ -15,4 +15,4 @@ Run these skills in order for the ticket:
 
 Stop the chain if a step cannot proceed (no plan, no browser MCP, unresolved questions). Surface the blocker to the user.
 
-All output under `qa-reports/$ARGUMENTS/`.
+All output under `qa-reports/<ticket-key>/` (ticket key only, not the notes).

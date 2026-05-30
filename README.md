@@ -93,11 +93,11 @@ Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fil
 
 | Command | Argument | Does |
 |---|---|---|
-| `/feature-qa` | `<jira-ticket-number>` | Full flow: build plan → run with evidence → report on pass |
+| `/feature-qa` | `<jira-ticket-number> [notes]` | Full flow: build plan → run with evidence → report on pass |
 
 Skills: `qa-test-plan` (ticket → plan: positive, negative, regression, what-if), `qa-execute` (run by hand, screenshot per scenario, pass/fail report), `qa-jira-report` (post result to ticket on pass, confirm-gated).
 
-Usage: `/feature-qa PROJ-123`. Plan written to `qa-reports/PROJ-123/test-plan.md`, screenshots + report to `qa-reports/PROJ-123/`. Any failed scenario or logged issue → verdict FAIL, nothing posted. PASS → comment drafted, you confirm, then posted.
+Usage: `/feature-qa PROJ-123`. Optional notes after ticket key add context — `/feature-qa PROJ-123 focus on mobile checkout, skip desktop`. Plan written to `qa-reports/PROJ-123/test-plan.md`, screenshots + report to `qa-reports/PROJ-123/`. Any failed scenario or logged issue → verdict FAIL, nothing posted. PASS → comment drafted, you confirm, then posted.
 
 All external access detected dynamically by tool **description** (not name) and gated: no Jira MCP → paste ticket details / paste-ready comment; no browser MCP → stops (manual QA needs one for evidence).
 
