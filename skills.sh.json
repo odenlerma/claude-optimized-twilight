@@ -16,6 +16,11 @@
       "title": "Feature Code Review",
       "description": "Impact-driven code review from Jira tickets — scope the change, review by impact, report on pass.",
       "skills": ["cr-scope", "cr-review", "cr-jira-report"]
+    },
+    {
+      "title": "Idea to Ticket",
+      "description": "Turn a raw idea into Jira ticket(s) — interrogate the idea, assess the codebase, draft caveman-lite tickets, create on approval.",
+      "skills": ["idea-clarify", "idea-assess", "idea-draft", "idea-jira-create"]
     }
   ]
 }

@@ -42,7 +42,7 @@ npx skills add odenlerma/claude-optimized-twilight
 
 This installs all discoverable skills — they auto-trigger by phrase:
 
-- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`
 - Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
 
 Preview without installing: `npx skills add . --list`.
@@ -115,6 +115,20 @@ Usage: `/feature-code-review PROJ-123`. Optional notes after ticket key add cont
 
 All external access detected dynamically by tool **description** (not name) and gated: no Jira reader MCP → paste ticket details; no comment MCP → paste-ready comment.
 
+### idea-to-ticket
+
+Turn a raw idea into well-formed Jira ticket(s). Interrogate vague input (push back, name contradictions, no sycophancy), assess the codebase for collisions when one is present, draft caveman-lite title/description/acceptance-criteria, create in Jira only on your explicit approval. Developer assessment + test plan post as a **comment** (when a comment MCP exists), keeping the ticket description lean. The front half of the feature lifecycle — `feature-code-review` and `feature-qa` cover the rest.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/idea-to-ticket` | `<idea text> [notes]` | Full flow: interrogate idea → assess codebase → draft tickets → create on approval |
+
+Skills: `idea-clarify` (idea → intent + acceptance criteria, interrogates vagueness), `idea-assess` (codebase only — collision scan + dev assessment + test plan), `idea-draft` (caveman-lite ticket(s), flat split on confirm), `idea-jira-create` (create on approval, post dev/test as comment, confirm-gated).
+
+Usage: `/idea-to-ticket add CSV export to the reports page`. Optional notes add scope/constraints — `/idea-to-ticket add CSV export focus on the reports page only`. Drafts written to `ticket-drafts/<slug>/` (intent, assessment, tickets). Idea spans separate work → flat split proposed, you confirm. Nothing created until you approve.
+
+Differs from `jira-ticketize` (meeting-wiki): that drafts tickets from a meeting transcript; this drafts from a free-text idea with codebase-collision awareness and dev/QA artifacts. All external access detected by tool **description** (not name) and gated: no create MCP → paste-ready ticket(s) + comment(s); no comment MCP → paste-ready comment.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -143,6 +157,12 @@ All external access detected dynamically by tool **description** (not name) and 
 - **git** — *required* for `cr-scope` diff. Reviews the feature branch diff vs a base branch; falls back to locating feature files if no diff/branch exists.
 - **Jira MCP servers** — *optional*: reader (fetch ticket intent), comment-add (post result on pass). Missing reader → paste ticket details. Missing comment-add → paste-ready comment. Detected by tool description; wire via your own config.
 - No browser MCP needed — review is static (code vs intent). No env vars, no API keys, no inline secrets (authoring Rules 1–2).
+
+### idea-to-ticket
+
+- **Jira MCP servers** — *optional*: create-issue (file the ticket), comment-add (post dev assessment + test plan), reader (duplicate-ticket check). Missing create-issue → paste-ready ticket(s) + comment(s). Missing comment-add → paste-ready comment. Missing reader → duplicate check skipped. Detected by tool description; wire via your own config.
+- **git / source files** — codebase analysis (`idea-assess`) runs only when invoked inside a codebase; outside one, it skips and tickets carry title/desc/AC only.
+- No browser MCP needed. No env vars, no API keys, no inline secrets (authoring Rules 1–2).
 
 ## Troubleshooting
 

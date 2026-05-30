@@ -3,7 +3,7 @@
   "description": "Personal Claude Code plugin marketplace",
   "metadata": {
     "description": "Anthropic example skills",
-    "version": "5.3.0"
+    "version": "6.0.0"
   },
   "owner": {
     "name": "Audruey Gana",
@@ -29,6 +29,11 @@
       "name": "feature-code-review",
       "source": "./plugins/feature-code-review",
       "description": "Unbiased, impact-driven code review of a feature anchored to its Jira ticket — review the diff plus related code across performance, security, responsiveness, error handling, UX, reusable components, and structure; skip per-line nits; post on PASS only after you confirm."
+    },
+    {
+      "name": "idea-to-ticket",
+      "source": "./plugins/idea-to-ticket",
+      "description": "Turn a raw idea into well-formed Jira ticket(s) — interrogate vague input, assess the codebase for collisions, draft caveman-lite title/description/acceptance-criteria, and create in Jira only with explicit human approval; post dev assessment + test plan as a comment."
     }
   ]
 }
