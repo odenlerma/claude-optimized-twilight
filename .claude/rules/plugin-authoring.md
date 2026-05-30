@@ -28,3 +28,42 @@ Every plugin, skill, command, and agent name unique across whole marketplace. No
 
 ## 9. Skills must be skills.sh-discoverable
 Every skill needs valid `SKILL.md` frontmatter (`name` + `description`) and a CLI-discoverable path, and plugin skills must be grouped in root `skills.sh.json`. See [`.claude/rules/skills-distribution.md`](skills-distribution.md). Verify with `npx skills add . --list`.
+
+## 10. Hooks live in hooks/hooks.json
+Plugin hooks go in `plugins/<plugin>/hooks/hooks.json`. Never user/project `settings.json` or `.claude/hooks/` — those are out-of-plugin scope. Optional top-level `description`, then `hooks` object.
+
+**Shape — 3 levels:** event → matcher group → handler.
+
+```json
+{
+  "description": "what these hooks do",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check.sh", "args": [] }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Events (when fire):** `SessionStart`/`SessionEnd` (per session); `UserPromptSubmit`, `Stop` (per turn); `PreToolUse`, `PostToolUse`, `PostToolUseFailure` (per tool call); `SubagentStart`/`SubagentStop`, `PreCompact`/`PostCompact`, `Notification`. Full list → docs.
+
+**Matchers** (filter when hook fires): `*`/`""`/omit = all; letters+digits+`_`+`|` = exact or `|`-list (`Edit|Write`); other chars = regex. Tool events match `tool_name`. MCP tools are `mcp__<server>__<tool>` — `mcp__memory__.*` matches all of a server's tools. Narrow tool+args with handler `if`: `"Bash(git *)"`, `"Edit(*.ts)"`.
+
+**Handler types:** `command` (shell; stdin JSON → exit code/stdout), `http` (POST), `mcp_tool` (call connected MCP), `prompt` (LLM yes/no), `agent` (subagent verifier).
+
+**Command handler:** `command` required. With `args` = exec form (no shell, each arg literal — use for path placeholders). Without `args` = shell form (pipes, `&&`). `async`/`asyncRewake` run background. `timeout` in seconds.
+
+**Path placeholders:** `${CLAUDE_PLUGIN_ROOT}` (bundled scripts — use this), `${CLAUDE_PLUGIN_DATA}` (persistent data), `${CLAUDE_PROJECT_DIR}` (project root). Never relative paths.
+
+**Input:** command hook gets JSON on **stdin** — `session_id`, `cwd`, `hook_event_name`. Tool events add `tool_name`, `tool_input` (+`tool_response` on PostToolUse). Read file path via `jq -r '.tool_input.file_path'`. No `$CLAUDE_TOOL_*` env vars exist.
+
+**Output + exit codes:** exit 0 = ok (stdout parsed for JSON); exit 2 = block (stderr → Claude); other = non-blocking error. Or exit 0 + JSON: `continue:false` stops; PreToolUse `hookSpecificOutput.permissionDecision` (`allow`/`deny`/`ask`); `additionalContext` injects context. Use exit codes OR JSON — not both.
+
+**Security:** validate stdin, quote `"$VAR"`, no secrets (Rule 2), absolute paths via `${CLAUDE_PLUGIN_ROOT}`, skip `.env`/`.git`.
+
+Full reference: https://code.claude.com/docs/en/hooks

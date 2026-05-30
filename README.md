@@ -83,7 +83,7 @@ Author Claude Code plugin marketplaces. Bundles the four workflow commands plus 
 | `/validate` | `[plugin-name]` | Validate catalog (schema + skills.sh discoverability) + plugin-quality review |
 | `/release` | `<plugin-name> <major\|minor\|patch>` | Bump plugin + marketplace versions, commit |
 
-Bundled rules: `plugin-authoring.md` (9 rules), `skills-distribution.md` (skills.sh discoverability).
+Bundled rules: `plugin-authoring.md` (10 rules — incl. Rule 10 hook authoring: `hooks/hooks.json` location, matchers, handler types, stdin-JSON input), `skills-distribution.md` (skills.sh discoverability).
 
 Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fill in components, `/validate` before commit, `/release my-plugin minor` to ship.
 

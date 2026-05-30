@@ -54,6 +54,7 @@ Load `${CLAUDE_PLUGIN_ROOT}/rules/plugin-authoring.md` once. For each plugin in 
 - Empty or oversized input (zero-byte file, 10MB file) → bounded?
 - Hook race conditions → any hook writes shared state without atomic write?
 - `${CLAUDE_PLUGIN_ROOT}` used consistently in hooks/MCP configs, not relative paths.
+- **Rule 10 — hooks**: hooks in `plugins/<name>/hooks/hooks.json` (not `settings.json`/`.claude/hooks/`); command hooks read input from stdin JSON (`tool_input.file_path` via `jq`), not `$CLAUDE_TOOL_*` env vars.
 
 Each finding = one line: `<file>:<line-or-section> — <rule/category> — <one-line problem> — <suggested fix>`.
 
