@@ -1,11 +1,11 @@
 ---
 description: Unbiased, impact-driven code review of a feature from a Jira ticket — scope the change, review by impact, post on PASS after you confirm
-argument-hint: <jira-ticket-number>
+argument-hint: <jira-ticket-number> [notes]
 ---
 
-Run full code review for Jira ticket `$ARGUMENTS`.
+Run full code review for Jira ticket in `$ARGUMENTS`.
 
-`$ARGUMENTS` empty → ask once: `Jira ticket number?` Stop until provided.
+First token of `$ARGUMENTS` = Jira ticket key. Remaining text (optional) = free-text notes — extra context to factor into review (focus areas, constraints, scope). No ticket → ask once: `Jira ticket number?` Stop until provided.
 
 Run these skills in order for the ticket:
 
@@ -15,4 +15,4 @@ Run these skills in order for the ticket:
 
 Stop the chain if a step cannot proceed (no ticket, no diff/feature code, unresolved questions). Surface the blocker to the user.
 
-All output under `code-reviews/$ARGUMENTS/`.
+All output under `code-reviews/<ticket-key>/` (ticket key only, not the notes).

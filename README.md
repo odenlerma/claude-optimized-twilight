@@ -107,11 +107,11 @@ Unbiased, **impact-driven** code review driven by a Jira ticket. Fetch the featu
 
 | Command | Argument | Does |
 |---|---|---|
-| `/feature-code-review` | `<jira-ticket-number>` | Full flow: scope change → review by impact → report on pass |
+| `/feature-code-review` | `<jira-ticket-number> [notes]` | Full flow: scope change → review by impact → report on pass |
 
 Skills: `cr-scope` (ticket → intent + change inventory: diff + related context), `cr-review` (review by dimension — performance, security, responsiveness, error handling, UX, reusable components, structure; verdict PASS / CHANGES REQUESTED), `cr-jira-report` (post result to ticket on pass, confirm-gated).
 
-Usage: `/feature-code-review PROJ-123`. Scope written to `code-reviews/PROJ-123/scope.md`, review to `code-reviews/PROJ-123/review.md`. Any Blocker or Major finding → verdict CHANGES REQUESTED, nothing posted. PASS → comment drafted, you confirm, then posted.
+Usage: `/feature-code-review PROJ-123`. Optional notes after ticket key add context — `/feature-code-review PROJ-123 focus on the auth refactor`. Scope written to `code-reviews/PROJ-123/scope.md`, review to `code-reviews/PROJ-123/review.md`. Any Blocker or Major finding → verdict CHANGES REQUESTED, nothing posted. PASS → comment drafted, you confirm, then posted.
 
 All external access detected dynamically by tool **description** (not name) and gated: no Jira reader MCP → paste ticket details; no comment MCP → paste-ready comment.
 

@@ -27,9 +27,9 @@ Scope a feature for review. Anchor everything to ticket intent. Stay curious —
 
 ### 1. Resolve ticket
 
-Take `$ARGUMENTS` as Jira ticket number/key. Empty → ask once: `Jira ticket number?` Stop until provided.
+First whitespace-delimited token of `$ARGUMENTS` = Jira ticket number/key. Remaining text (optional) = free-text **notes**: extra context to factor into this scope and review (focus areas, constraints, scope). No ticket → ask once: `Jira ticket number?` Stop until provided.
 
-Slug `<TICKET>` = the ticket key (e.g. `PROJ-123`). All output lives under `code-reviews/<TICKET>/`.
+Slug `<TICKET>` = the ticket key (e.g. `PROJ-123`), notes excluded. All output lives under `code-reviews/<TICKET>/`.
 
 ### 2. Detect Jira reader tool
 
@@ -67,6 +67,8 @@ Stop until provided. Do not retry detection.
 
 From the ticket, write the feature intent in plain words: what it must do, who uses it, the user-facing surface, and the acceptance criteria the code must satisfy. This is the yardstick for the review.
 
+Notes present → fold them into the yardstick (focus area named → weight it in review; constraint named → treat as criterion).
+
 ### 5. Build change inventory
 
 Find the code that implements the feature.
@@ -88,6 +90,9 @@ Write `code-reviews/<TICKET>/scope.md`:
 
 Intent: <one-line plain summary of what the feature must do>
 Users / surface: <who uses it, where it appears>
+
+## Notes
+- (none) | - <user-supplied notes>
 
 ## Acceptance criteria
 - <criterion the code must satisfy>
