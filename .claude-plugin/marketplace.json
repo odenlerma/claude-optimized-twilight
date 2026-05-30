@@ -3,7 +3,7 @@
   "description": "Personal Claude Code plugin marketplace",
   "metadata": {
     "description": "Anthropic example skills",
-    "version": "6.1.0"
+    "version": "7.0.0"
   },
   "owner": {
     "name": "Audruey Gana",
@@ -34,6 +34,11 @@
       "name": "idea-to-ticket",
       "source": "./plugins/idea-to-ticket",
       "description": "Turn a raw idea into well-formed Jira ticket(s) — interrogate vague input, assess the codebase for collisions, draft caveman-lite title/description/acceptance-criteria, and create in Jira only with explicit human approval; post dev assessment + test plan as a comment."
+    },
+    {
+      "name": "vibe-coding-essentials",
+      "source": "./plugins/vibe-coding-essentials",
+      "description": "Guardrails for AI-assisted rapid coding — PostToolUse scanners for secrets/security/format/types on every edit, five reusable rulesets (security, clean-code, git, testing, project-setup) loadable per session, plus on-demand secret-scan, security-audit, and refactor-plan skills."
     }
   ]
 }

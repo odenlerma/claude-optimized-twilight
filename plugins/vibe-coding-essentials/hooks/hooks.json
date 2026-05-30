@@ -1,0 +1,24 @@
+{
+  "description": "Vibe-coding guardrail scanners that run after every file edit. Report-only — they never block the edit, and degrade to no-op when a tool is absent. (1) security/secret scan, (2) format + lint, (3) type-check.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v jq >/dev/null 2>&1 || exit 0; f=$(jq -r '.tool_input.file_path // empty'); [ -z \"$f\" ] && exit 0; if command -v semgrep >/dev/null 2>&1; then semgrep --config=auto \"$f\" 2>/dev/null || true; fi; if command -v bandit >/dev/null 2>&1 && [[ \"$f\" == *.py ]]; then bandit \"$f\" 2>/dev/null || true; fi; if command -v gitleaks >/dev/null 2>&1; then gitleaks detect --source=\"$f\" --no-git 2>/dev/null || true; fi; if grep -qE '(password|secret|key|token)\\s*=\\s*[\"\\x27][^\"\\x27]{8,}' \"$f\" 2>/dev/null; then echo \"Warning: Potential hardcoded secrets detected in $f\" >&2; fi"
+          },
+          {
+            "type": "command",
+            "command": "command -v jq >/dev/null 2>&1 || exit 0; f=$(jq -r '.tool_input.file_path // empty'); [ -z \"$f\" ] && exit 0; case \"$f\" in *.js|*.jsx|*.ts|*.tsx|*.json|*.css|*.scss|*.html|*.md|*.yaml|*.yml) if command -v prettier >/dev/null 2>&1; then prettier --check \"$f\" 2>/dev/null || true; fi; if command -v eslint >/dev/null 2>&1; then case \"$f\" in *.js|*.jsx|*.ts|*.tsx) eslint \"$f\" 2>/dev/null || true;; esac; fi;; *.py) if command -v ruff >/dev/null 2>&1; then ruff check \"$f\" 2>/dev/null || true; fi;; *.go) if command -v gofmt >/dev/null 2>&1; then gofmt -l \"$f\" 2>/dev/null || true; fi;; *.rs) if command -v rustfmt >/dev/null 2>&1; then rustfmt --check \"$f\" 2>/dev/null || true; fi;; esac"
+          },
+          {
+            "type": "command",
+            "command": "command -v jq >/dev/null 2>&1 || exit 0; f=$(jq -r '.tool_input.file_path // empty'); [ -z \"$f\" ] && exit 0; case \"$f\" in *.ts|*.tsx) if command -v tsc >/dev/null 2>&1 && [ -f tsconfig.json ]; then tsc --noEmit 2>/dev/null || true; fi;; *.py) if command -v mypy >/dev/null 2>&1; then mypy \"$f\" 2>/dev/null || true; elif command -v pyright >/dev/null 2>&1; then pyright \"$f\" 2>/dev/null || true; fi;; esac"
+          }
+        ]
+      }
+    ]
+  }
+}

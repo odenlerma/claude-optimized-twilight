@@ -1,0 +1,9 @@
+{
+  "name": "vibe-coding-essentials",
+  "description": "Guardrails for AI-assisted rapid coding — PostToolUse scanners for secrets/security/format/types on every edit, five reusable rulesets (security, clean-code, git, testing, project-setup) loadable per session, plus on-demand secret-scan, security-audit, and refactor-plan skills.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  }
+}

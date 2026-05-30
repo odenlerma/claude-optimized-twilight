@@ -129,6 +129,23 @@ Usage: `/idea-to-ticket add CSV export to the reports page`. Optional notes add 
 
 Differs from `jira-ticketize` (meeting-wiki): that drafts tickets from a meeting transcript; this drafts from a free-text idea with codebase-collision awareness and dev/QA artifacts. All external access detected by tool **description** (not name) and gated: no create MCP → paste-ready ticket(s) + comment(s); no comment MCP → paste-ready comment.
 
+### vibe-coding-essentials
+
+Guardrails for AI-assisted ("vibe") rapid coding. Three **PostToolUse hooks** run after every edit (report-only, never block): secret/security scan, format + lint, type-check. Five **reusable rulesets** load into a session and the model conforms for the rest of it. Three **on-demand skills** scan, audit, and plan. Rulesets are generic — no org, path, or framework assumptions — reusable across any project.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/vibe-guardrails` | — | Load all five rulesets at once |
+| `/vibe-security-rules` | — | Load security ruleset only |
+| `/vibe-clean-code-rules` | — | Load clean-code ruleset only |
+| `/vibe-git-rules` | — | Load git/commit-hygiene ruleset only |
+| `/vibe-testing-rules` | — | Load testing-discipline ruleset only |
+| `/vibe-setup-rules` | — | Load project-setup/workflow ruleset only |
+
+Skills (auto-trigger): `vibe-secret-scan` (path/diff → hardcoded-secret findings, gitleaks or grep fallback), `vibe-security-audit` (code → ranked vulnerabilities vs security ruleset, semgrep/bandit if present), `vibe-refactor-plan` (code → prioritized non-destructive clean-code refactor plan). All skills read-only — they report, never edit.
+
+Usage: `/vibe-guardrails` at session start to turn on all rulesets, or load one with the per-ruleset commands. Say "scan for secrets", "security audit this", or "refactor plan" to trigger a skill. The three edit hooks run automatically once installed. Hooks and skills degrade to no-op (or grep-only) when the underlying CLI is absent.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -163,6 +180,15 @@ Differs from `jira-ticketize` (meeting-wiki): that drafts tickets from a meeting
 - **Jira MCP servers** — *optional*: create-issue (file the ticket), comment-add (post dev assessment + test plan), reader (duplicate-ticket check). Missing create-issue → paste-ready ticket(s) + comment(s). Missing comment-add → paste-ready comment. Missing reader → duplicate check skipped. Detected by tool description; wire via your own config.
 - **git / source files** — codebase analysis (`idea-assess`) runs only when invoked inside a codebase; outside one, it skips and tickets carry title/desc/AC only.
 - No browser MCP needed. No env vars, no API keys, no inline secrets (authoring Rules 1–2).
+
+### vibe-coding-essentials
+
+- **`jq`** — *required by the edit hooks*: hooks read the edited file path from stdin JSON (`tool_input.file_path`). Absent → hooks no-op. Skills don't need it.
+- **Security CLIs** — *optional*: `semgrep`, `bandit` (Python), `gitleaks`. Used by the edit hook and the audit/secret skills. Absent → fall back to grep-based secret scan and manual code review.
+- **Formatters/linters** — *optional*: `prettier`, `eslint`, `ruff` (Python), `gofmt`, `rustfmt`. The format/lint hook runs whichever are installed, by file extension. Absent → no-op.
+- **Type checkers** — *optional*: `tsc` (needs a `tsconfig.json`), `mypy` or `pyright`. The type-check hook runs them by extension. Absent → no-op.
+- **git** — *optional*: skills default to scanning the staged/working diff when in a repo; outside one, they scan the named path.
+- All hooks are **report-only** — they never block an edit. No env vars, no API keys, no inline secrets (authoring Rules 1–2). No network calls.
 
 ## Troubleshooting
 
