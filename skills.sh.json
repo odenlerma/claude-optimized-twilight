@@ -21,6 +21,16 @@
       "title": "Idea to Ticket",
       "description": "Turn a raw idea into Jira ticket(s) — interrogate the idea, assess the codebase, draft caveman-lite tickets, create on approval.",
       "skills": ["idea-clarify", "idea-assess", "idea-draft", "idea-jira-create"]
+    },
+    {
+      "title": "Vibe Coding Essentials",
+      "description": "Guardrails for AI-assisted rapid coding — scan for secrets, audit against a security ruleset, plan clean-code refactors.",
+      "skills": ["vibe-secret-scan", "vibe-security-audit", "vibe-refactor-plan"]
+    },
+    {
+      "title": "Dev Assessment",
+      "description": "Engineering scoping of a Jira ticket — check ticket sufficiency, scan the workspace repos, write a caveman-lite assessment, post to Jira on approval.",
+      "skills": ["da-intake", "da-workspace", "da-assess", "da-jira-report"]
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "name": "dev-assessment",
+  "description": "Turn an existing Jira ticket into an engineering scoping assessment — check ticket info is sufficient (always ask the human when not), scan the whole workspace not just one repo, write a caveman-lite assessment (complexity, affected code & repos, approach, risks, open questions), and post it to Jira only after human approval.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  }
+}

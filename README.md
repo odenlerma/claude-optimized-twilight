@@ -42,7 +42,7 @@ npx skills add odenlerma/claude-optimized-twilight
 
 This installs all discoverable skills — they auto-trigger by phrase:
 
-- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`, `da-intake`, `da-workspace`, `da-assess`, `da-jira-report`
 - Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
 
 Preview without installing: `npx skills add . --list`.
@@ -146,6 +146,20 @@ Skills (auto-trigger): `vibe-secret-scan` (path/diff → hardcoded-secret findin
 
 Usage: `/vibe-guardrails` at session start to turn on all rulesets, or load one with the per-ruleset commands. Say "scan for secrets", "security audit this", or "refactor plan" to trigger a skill. The three edit hooks run automatically once installed. Hooks and skills degrade to no-op (or grep-only) when the underlying CLI is absent.
 
+### dev-assessment
+
+Turn an **existing** Jira ticket into an engineering scoping assessment — what it takes to build it. Check the ticket carries enough to scope (clear intent, scope boundary, definition of done); thin ticket → **always** ask the human for clarity before assessing, never assume. Scan the **workspace** (sibling repos, not just cwd — projects may be polyrepo), confirm which repos are in scope, then map the ticket onto real code. Write a caveman-lite assessment and post it to Jira only after you approve. Where `idea-to-ticket` files a ticket, this scopes one that already exists.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/dev-assessment` | `<jira-ticket-number> [notes]` | Full flow: intake + sufficiency gate → workspace scope → assess → post on approval |
+
+Skills: `da-intake` (fetch ticket, score sufficiency, ask the human when thin — always), `da-workspace` (discover sibling repos, confirm in-scope set), `da-assess` (map ticket onto code across repos, write caveman-lite assessment — summary, complexity/effort S/M/L/XL, affected code & repos, approach, risks, open questions), `da-jira-report` (post condensed comment on approval, confirm-gated).
+
+Usage: `/dev-assessment PROJ-123`. Optional notes after the ticket key add context — `/dev-assessment PROJ-123 focus on the billing service`. Intent written to `dev-assessments/PROJ-123/intent.md`, scope to `scope.md`, assessment to `assessment.md`. Insufficient ticket → stops and asks. Nothing posted until you approve.
+
+All external access detected by tool **description** (not name) and gated: no Jira reader MCP → paste ticket details; no comment MCP → paste-ready comment.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -189,6 +203,12 @@ Usage: `/vibe-guardrails` at session start to turn on all rulesets, or load one 
 - **Type checkers** — *optional*: `tsc` (needs a `tsconfig.json`), `mypy` or `pyright`. The type-check hook runs them by extension. Absent → no-op.
 - **git** — *optional*: skills default to scanning the staged/working diff when in a repo; outside one, they scan the named path.
 - All hooks are **report-only** — they never block an edit. No env vars, no API keys, no inline secrets (authoring Rules 1–2). No network calls.
+
+### dev-assessment
+
+- **Jira MCP servers** — *optional*: reader (fetch ticket intent), comment-add (post the assessment on approval). Missing reader → paste ticket details. Missing comment-add → paste-ready comment. Detected by tool description; wire via your own config.
+- **Workspace / source files** — `da-workspace` scans the workspace root (parent of cwd, or cwd) for sibling repos by `.git` and project markers (`package.json`, `pom.xml`, `go.mod`, `pyproject.toml`, etc.). No repos beyond cwd → single-repo assessment, noted. `da-assess` is read-only — it never edits code.
+- No browser MCP needed — assessment is static (code vs intent). No env vars, no API keys, no inline secrets (authoring Rules 1–2).
 
 ## Troubleshooting
 
