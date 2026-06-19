@@ -174,6 +174,24 @@ Applies clarity + explicit success criteria, context/motivation, examples in `<e
 
 Usage: `/prompt-craft make a dashboard` → diagnosis + rewritten prompt + rationale. Or say "improve this prompt", "rewrite this prompt", "make this prompt better" to trigger the skill. Add a trailing note (target model, where it runs) for scope.
 
+### idea-creator
+
+Drive a raw idea to shipped, tested software through a research-gated pipeline. Capture ideas in a backlog, then `/start-goal` picks the next and runs it end to end: parallel research agents (market, usefulness, architecture, compliance, feasibility) → an explicit build/kill gate (don't pay to ship a loss) → a per-idea git repo with tailored `.claude/` rules → a phased PRD → phase-by-phase build where nothing completes until it's verified with evidence → marketing (business ideas) → human handover. Progress is a dated diary you stop and resume across sessions; the loop ends only when every idea is `completed` or `killed`. Runs unattended — real-money deploys, secret use, and `git commit`/`push` stay human-gated.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/add-idea` | `<description> [notes]` | Append an idea to `docs/tasks.md` (status, category, slug); supports enhancement ideas linked to a project |
+| `/start-goal` | — | Pick the next non-completed idea and run the full pipeline, looping across ideas until all terminal |
+| `/goal` | `<objective> [context]` | Standalone autonomous loop — drive any objective to verified-with-evidence |
+| `/log-goaling` | `[note]` | Append a dated caveman diary entry (phase, decisions, blockers, next) |
+| `/continue-goaling` | — | Resume from the diary, reconciling against files on disk |
+
+Skills: `goal-backlog` (idea ledger), `goal-log` (resumable diary), `goal-orchestrate` (cross-idea loop + resume), `goal-pipeline` (one idea through the phases), `goal-research` (spawn research agents + synthesize SUMMARY), `goal-gate` (build/kill go-no-go), `goal-scaffold` (per-idea git repo + rules), `goal-prd` (phased PRD), `goal-build` (phase-by-phase build + QA), `goal-run` (verify-until-done engine, what `/goal` wraps), `goal-verify` (evidence gate), `goal-handover` (handover + comms plan).
+
+Agents (research, spawned in parallel): `goal-market-analyst` (profitability), `goal-usefulness-analyst` (portability), `goal-architect` (mobile vs web + stack), `goal-compliance-analyst` (regulatory + privacy), `goal-feasibility-analyst` (buildable in budget/time), plus `goal-marketing-strategist` (GTM, business ideas).
+
+Usage: `/add-idea split shared receipts by line item` a few times, then `/start-goal`. Research dossiers land in `docs/research/<slug>/`, each project in its own `<slug>/` git repo, the diary in `docs/notes/goaling-log.md`. Resume any time with `/continue-goaling`. Bundles a researched `reference/remote-control.md` (drive Claude Code from your phone, ToS-safe) cited at handover.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -227,6 +245,15 @@ Usage: `/prompt-craft make a dashboard` → diagnosis + rewritten prompt + ratio
 ### prompt-craft
 
 - **No external dependencies.** Self-contained — the skill reads its checklist from `${CLAUDE_PLUGIN_ROOT}/rules/prompting-best-practices.md`. No MCP, no CLI, no env vars, no API keys, no network calls. Operates on prompt text you supply (`$ARGUMENTS`, pasted, or referenced context).
+
+### idea-creator
+
+- **git** — *required*: each idea that passes research gets its own `<slug>/` repo. `goal-scaffold` runs `git init` on a fresh subdir only — never the cwd or an existing repo, and never auto-commits.
+- **Built-in `run` + `verify` skills** — `goal-verify` uses them to actually launch the app and confirm behavior per build phase.
+- **Browser-automation MCP** — *optional*: for screenshot evidence on UI phases (`goal-verify` detects it by description). Missing → UI phases escalate (can't capture evidence); API/CLI phases use run-log evidence.
+- **Cloudflare / deploy MCP** — *optional*: deploys are never automatic. Wire a Cloudflare MCP you supply, or the plugin prints the deploy command for you to run. Real-money deploys, secret use, and commits are always human-gated.
+- **Web search** — research agents use built-in WebSearch/WebFetch. No external API keys, no inline secrets (authoring Rules 1–2).
+- Workspace created in the cwd you confirm: `docs/` (backlog, research, diary) + one git repo per idea.
 
 ## Troubleshooting
 

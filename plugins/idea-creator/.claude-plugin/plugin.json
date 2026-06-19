@@ -1,0 +1,9 @@
+{
+  "name": "idea-creator",
+  "description": "Drive a raw idea to shipped, tested software through a research-gated pipeline — capture ideas in a backlog, run each through parallel research agents (market, usefulness, architecture, compliance, feasibility) to an explicit build/kill gate, scaffold a per-idea git repo, author a phased PRD, build each phase to verified-with-evidence, then marketing and human handover; progress tracked as a resumable diary that loops across ideas until every idea is completed or killed.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  }
+}
