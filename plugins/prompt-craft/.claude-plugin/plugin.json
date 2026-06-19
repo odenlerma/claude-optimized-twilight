@@ -1,0 +1,9 @@
+{
+  "name": "prompt-craft",
+  "description": "Diagnose a weak prompt and rewrite it to Anthropic's prompt-engineering best practices — clarity, context/motivation, examples in <example> tags, XML structure, role, tell-what-to-do framing, calibrated thinking/tool/agentic guidance — without over-prompting or redesigning the task.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Audruey Gana",
+    "email": "audruey.gana@legalmatch.com"
+  }
+}

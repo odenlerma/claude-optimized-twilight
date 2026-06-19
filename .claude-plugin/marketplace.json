@@ -3,7 +3,7 @@
   "description": "Personal Claude Code plugin marketplace",
   "metadata": {
     "description": "Anthropic example skills",
-    "version": "7.1.0"
+    "version": "8.0.0"
   },
   "owner": {
     "name": "Audruey Gana",
@@ -44,6 +44,11 @@
       "name": "dev-assessment",
       "source": "./plugins/dev-assessment",
       "description": "Turn an existing Jira ticket into an engineering scoping assessment — check ticket info is sufficient (always ask the human when not), scan the whole workspace not just one repo, write a caveman-lite assessment (complexity, affected code & repos, approach, risks, open questions), and post it to Jira only after human approval."
+    },
+    {
+      "name": "prompt-craft",
+      "source": "./plugins/prompt-craft",
+      "description": "Diagnose a weak prompt and rewrite it to Anthropic's prompt-engineering best practices — clarity, context/motivation, examples in <example> tags, XML structure, role, tell-what-to-do framing, calibrated thinking/tool/agentic guidance — without over-prompting or redesigning the task; outputs before/after plus what changed and why."
     }
   ]
 }

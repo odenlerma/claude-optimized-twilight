@@ -42,7 +42,7 @@ npx skills add odenlerma/claude-optimized-twilight
 
 This installs all discoverable skills — they auto-trigger by phrase:
 
-- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`, `da-intake`, `da-workspace`, `da-assess`, `da-jira-report`
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`, `da-intake`, `da-workspace`, `da-assess`, `da-jira-report`, `prompt-rewrite`
 - Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
 
 Preview without installing: `npx skills add . --list`.
@@ -83,7 +83,7 @@ Author Claude Code plugin marketplaces. Bundles the four workflow commands plus 
 | `/validate` | `[plugin-name]` | Validate catalog (schema + skills.sh discoverability) + plugin-quality review |
 | `/release` | `<plugin-name> <major\|minor\|patch>` | Bump plugin + marketplace versions, commit |
 
-Bundled rules: `plugin-authoring.md` (10 rules — incl. Rule 10 hook authoring: `hooks/hooks.json` location, matchers, handler types, stdin-JSON input), `skills-distribution.md` (skills.sh discoverability).
+Bundled rules: `plugin-authoring.md` (11 rules — incl. Rule 10 hook authoring: `hooks/hooks.json` location, matchers, handler types, stdin-JSON input; Rule 11 prompt text follows prompting-best-practices), `skills-distribution.md` (skills.sh discoverability), `prompting-best-practices.md` (clear intent, context, examples, XML structure, no over-prompting).
 
 Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fill in components, `/validate` before commit, `/release my-plugin minor` to ship.
 
@@ -160,6 +160,20 @@ Usage: `/dev-assessment PROJ-123`. Optional notes after the ticket key add conte
 
 All external access detected by tool **description** (not name) and gated: no Jira reader MCP → paste ticket details; no comment MCP → paste-ready comment.
 
+### prompt-craft
+
+Diagnose a weak prompt and rewrite it to Anthropic's prompt-engineering best practices, then show before/after with what changed and why. Preserves your intent — rewrites the prompt, never redesigns the task. Bundles the codified checklist it applies (`rules/prompting-best-practices.md`).
+
+| Command | Argument | Does |
+|---|---|---|
+| `/prompt-craft` | `<prompt text to improve>` | Diagnose weaknesses → rewrite to best practices → before/after + why |
+
+Skills: `prompt-rewrite` (capture prompt + intent → diagnose against the checklist → rewrite, applying only fixes that fit the prompt's job → output rewritten prompt + change rationale mapped to each rule).
+
+Applies clarity + explicit success criteria, context/motivation, examples in `<example>` tags when format matters, XML structure, role when it sharpens output, tell-what-to-do framing, and thinking/tool/agentic/anti-overengineering/anti-hallucination guidance calibrated to the prompt — without over-prompting (no gratuitous CRITICAL/MUST — current models overtrigger).
+
+Usage: `/prompt-craft make a dashboard` → diagnosis + rewritten prompt + rationale. Or say "improve this prompt", "rewrite this prompt", "make this prompt better" to trigger the skill. Add a trailing note (target model, where it runs) for scope.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -209,6 +223,10 @@ All external access detected by tool **description** (not name) and gated: no Ji
 - **Jira MCP servers** — *optional*: reader (fetch ticket intent), comment-add (post the assessment on approval). Missing reader → paste ticket details. Missing comment-add → paste-ready comment. Detected by tool description; wire via your own config.
 - **Workspace / source files** — `da-workspace` scans the workspace root (parent of cwd, or cwd) for sibling repos by `.git` and project markers (`package.json`, `pom.xml`, `go.mod`, `pyproject.toml`, etc.). No repos beyond cwd → single-repo assessment, noted. `da-assess` is read-only — it never edits code.
 - No browser MCP needed — assessment is static (code vs intent). No env vars, no API keys, no inline secrets (authoring Rules 1–2).
+
+### prompt-craft
+
+- **No external dependencies.** Self-contained — the skill reads its checklist from `${CLAUDE_PLUGIN_ROOT}/rules/prompting-best-practices.md`. No MCP, no CLI, no env vars, no API keys, no network calls. Operates on prompt text you supply (`$ARGUMENTS`, pasted, or referenced context).
 
 ## Troubleshooting
 
