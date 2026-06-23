@@ -21,6 +21,26 @@
       "title": "Idea to Ticket",
       "description": "Turn a raw idea into Jira ticket(s) — interrogate the idea, assess the codebase, draft caveman-lite tickets, create on approval.",
       "skills": ["idea-clarify", "idea-assess", "idea-draft", "idea-jira-create"]
+    },
+    {
+      "title": "Vibe Coding Essentials",
+      "description": "Guardrails for AI-assisted rapid coding — scan for secrets, audit against a security ruleset, plan clean-code refactors.",
+      "skills": ["vibe-secret-scan", "vibe-security-audit", "vibe-refactor-plan"]
+    },
+    {
+      "title": "Dev Assessment",
+      "description": "Engineering scoping of a Jira ticket — check ticket sufficiency, scan the workspace repos, write a caveman-lite assessment, post to Jira on approval.",
+      "skills": ["da-intake", "da-workspace", "da-assess", "da-jira-report"]
+    },
+    {
+      "title": "Prompt Craft",
+      "description": "Diagnose a weak prompt and rewrite it to prompt-engineering best practices — clarity, context, examples, XML structure, calibrated guidance — without over-prompting.",
+      "skills": ["prompt-rewrite"]
+    },
+    {
+      "title": "Idea Creator",
+      "description": "Drive a raw idea to shipped, tested software — backlog, parallel research to a build/kill gate, per-idea repo scaffold, phased PRD, verify-with-evidence build, marketing, handover; resumable across sessions.",
+      "skills": ["goal-backlog", "goal-log", "goal-orchestrate", "goal-pipeline", "goal-research", "goal-gate", "goal-scaffold", "goal-prd", "goal-build", "goal-run", "goal-verify", "goal-handover"]
     }
   ]
 }

@@ -42,7 +42,7 @@ npx skills add odenlerma/claude-optimized-twilight
 
 This installs all discoverable skills — they auto-trigger by phrase:
 
-- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`
+- Plugin skills: `wiki-maintainer`, `jira-ticketize`, `qa-test-plan`, `qa-execute`, `qa-jira-report`, `cr-scope`, `cr-review`, `cr-jira-report`, `idea-clarify`, `idea-assess`, `idea-draft`, `idea-jira-create`, `da-intake`, `da-workspace`, `da-assess`, `da-jira-report`, `prompt-rewrite`
 - Vendored utilities: `caveman`, `caveman-review`, `skill-creator`
 
 Preview without installing: `npx skills add . --list`.
@@ -83,7 +83,7 @@ Author Claude Code plugin marketplaces. Bundles the four workflow commands plus 
 | `/validate` | `[plugin-name]` | Validate catalog (schema + skills.sh discoverability) + plugin-quality review |
 | `/release` | `<plugin-name> <major\|minor\|patch>` | Bump plugin + marketplace versions, commit |
 
-Bundled rules: `plugin-authoring.md` (10 rules — incl. Rule 10 hook authoring: `hooks/hooks.json` location, matchers, handler types, stdin-JSON input), `skills-distribution.md` (skills.sh discoverability).
+Bundled rules: `plugin-authoring.md` (11 rules — incl. Rule 10 hook authoring: `hooks/hooks.json` location, matchers, handler types, stdin-JSON input; Rule 11 prompt text follows prompting-best-practices), `skills-distribution.md` (skills.sh discoverability), `prompting-best-practices.md` (clear intent, context, examples, XML structure, no over-prompting).
 
 Usage: install into a marketplace repo. `/add-plugin my-plugin` to scaffold, fill in components, `/validate` before commit, `/release my-plugin minor` to ship.
 
@@ -146,6 +146,52 @@ Skills (auto-trigger): `vibe-secret-scan` (path/diff → hardcoded-secret findin
 
 Usage: `/vibe-guardrails` at session start to turn on all rulesets, or load one with the per-ruleset commands. Say "scan for secrets", "security audit this", or "refactor plan" to trigger a skill. The three edit hooks run automatically once installed. Hooks and skills degrade to no-op (or grep-only) when the underlying CLI is absent.
 
+### dev-assessment
+
+Turn an **existing** Jira ticket into an engineering scoping assessment — what it takes to build it. Check the ticket carries enough to scope (clear intent, scope boundary, definition of done); thin ticket → **always** ask the human for clarity before assessing, never assume. Scan the **workspace** (sibling repos, not just cwd — projects may be polyrepo), confirm which repos are in scope, then map the ticket onto real code. Write a caveman-lite assessment and post it to Jira only after you approve. Where `idea-to-ticket` files a ticket, this scopes one that already exists.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/dev-assessment` | `<jira-ticket-number> [notes]` | Full flow: intake + sufficiency gate → workspace scope → assess → post on approval |
+
+Skills: `da-intake` (fetch ticket, score sufficiency, ask the human when thin — always), `da-workspace` (discover sibling repos, confirm in-scope set), `da-assess` (map ticket onto code across repos, write caveman-lite assessment — summary, complexity/effort S/M/L/XL, affected code & repos, approach, risks, open questions), `da-jira-report` (post condensed comment on approval, confirm-gated).
+
+Usage: `/dev-assessment PROJ-123`. Optional notes after the ticket key add context — `/dev-assessment PROJ-123 focus on the billing service`. Intent written to `dev-assessments/PROJ-123/intent.md`, scope to `scope.md`, assessment to `assessment.md`. Insufficient ticket → stops and asks. Nothing posted until you approve.
+
+All external access detected by tool **description** (not name) and gated: no Jira reader MCP → paste ticket details; no comment MCP → paste-ready comment.
+
+### prompt-craft
+
+Diagnose a weak prompt and rewrite it to Anthropic's prompt-engineering best practices, then show before/after with what changed and why. Preserves your intent — rewrites the prompt, never redesigns the task. Bundles the codified checklist it applies (`rules/prompting-best-practices.md`).
+
+| Command | Argument | Does |
+|---|---|---|
+| `/prompt-craft` | `<prompt text to improve>` | Diagnose weaknesses → rewrite to best practices → before/after + why |
+
+Skills: `prompt-rewrite` (capture prompt + intent → diagnose against the checklist → rewrite, applying only fixes that fit the prompt's job → output rewritten prompt + change rationale mapped to each rule).
+
+Applies clarity + explicit success criteria, context/motivation, examples in `<example>` tags when format matters, XML structure, role when it sharpens output, tell-what-to-do framing, and thinking/tool/agentic/anti-overengineering/anti-hallucination guidance calibrated to the prompt — without over-prompting (no gratuitous CRITICAL/MUST — current models overtrigger).
+
+Usage: `/prompt-craft make a dashboard` → diagnosis + rewritten prompt + rationale. Or say "improve this prompt", "rewrite this prompt", "make this prompt better" to trigger the skill. Add a trailing note (target model, where it runs) for scope.
+
+### idea-creator
+
+Drive a raw idea to shipped, tested software through a research-gated pipeline. Capture ideas in a backlog, then `/start-goal` picks the next and runs it end to end: parallel research agents (market, usefulness, architecture, compliance, feasibility) → an explicit build/kill gate (don't pay to ship a loss) → a per-idea git repo with tailored `.claude/` rules → a phased PRD → phase-by-phase build where nothing completes until it's verified with evidence → marketing (business ideas) → human handover. Progress is a dated diary you stop and resume across sessions; the loop ends only when every idea is `completed` or `killed`. Runs unattended — real-money deploys, secret use, and `git commit`/`push` stay human-gated.
+
+| Command | Argument | Does |
+|---|---|---|
+| `/add-idea` | `<description> [notes]` | Append an idea to `docs/tasks.md` (status, category, slug); supports enhancement ideas linked to a project |
+| `/start-goal` | — | Pick the next non-completed idea and run the full pipeline, looping across ideas until all terminal |
+| `/goal` | `<objective> [context]` | Standalone autonomous loop — drive any objective to verified-with-evidence |
+| `/log-goaling` | `[note]` | Append a dated caveman diary entry (phase, decisions, blockers, next) |
+| `/continue-goaling` | — | Resume from the diary, reconciling against files on disk |
+
+Skills: `goal-backlog` (idea ledger), `goal-log` (resumable diary), `goal-orchestrate` (cross-idea loop + resume), `goal-pipeline` (one idea through the phases), `goal-research` (spawn research agents + synthesize SUMMARY), `goal-gate` (build/kill go-no-go), `goal-scaffold` (per-idea git repo + rules), `goal-prd` (phased PRD), `goal-build` (phase-by-phase build + QA), `goal-run` (verify-until-done engine, what `/goal` wraps), `goal-verify` (evidence gate), `goal-handover` (handover + comms plan).
+
+Agents (research, spawned in parallel): `goal-market-analyst` (profitability), `goal-usefulness-analyst` (portability), `goal-architect` (mobile vs web + stack), `goal-compliance-analyst` (regulatory + privacy), `goal-feasibility-analyst` (buildable in budget/time), plus `goal-marketing-strategist` (GTM, business ideas).
+
+Usage: `/add-idea split shared receipts by line item` a few times, then `/start-goal`. Research dossiers land in `docs/research/<slug>/`, each project in its own `<slug>/` git repo, the diary in `docs/notes/goaling-log.md`. Resume any time with `/continue-goaling`. Bundles a researched `reference/remote-control.md` (drive Claude Code from your phone, ToS-safe) cited at handover.
+
 ## Dependencies
 
 ### meeting-wiki
@@ -189,6 +235,25 @@ Usage: `/vibe-guardrails` at session start to turn on all rulesets, or load one 
 - **Type checkers** — *optional*: `tsc` (needs a `tsconfig.json`), `mypy` or `pyright`. The type-check hook runs them by extension. Absent → no-op.
 - **git** — *optional*: skills default to scanning the staged/working diff when in a repo; outside one, they scan the named path.
 - All hooks are **report-only** — they never block an edit. No env vars, no API keys, no inline secrets (authoring Rules 1–2). No network calls.
+
+### dev-assessment
+
+- **Jira MCP servers** — *optional*: reader (fetch ticket intent), comment-add (post the assessment on approval). Missing reader → paste ticket details. Missing comment-add → paste-ready comment. Detected by tool description; wire via your own config.
+- **Workspace / source files** — `da-workspace` scans the workspace root (parent of cwd, or cwd) for sibling repos by `.git` and project markers (`package.json`, `pom.xml`, `go.mod`, `pyproject.toml`, etc.). No repos beyond cwd → single-repo assessment, noted. `da-assess` is read-only — it never edits code.
+- No browser MCP needed — assessment is static (code vs intent). No env vars, no API keys, no inline secrets (authoring Rules 1–2).
+
+### prompt-craft
+
+- **No external dependencies.** Self-contained — the skill reads its checklist from `${CLAUDE_PLUGIN_ROOT}/rules/prompting-best-practices.md`. No MCP, no CLI, no env vars, no API keys, no network calls. Operates on prompt text you supply (`$ARGUMENTS`, pasted, or referenced context).
+
+### idea-creator
+
+- **git** — *required*: each idea that passes research gets its own `<slug>/` repo. `goal-scaffold` runs `git init` on a fresh subdir only — never the cwd or an existing repo, and never auto-commits.
+- **Built-in `run` + `verify` skills** — `goal-verify` uses them to actually launch the app and confirm behavior per build phase.
+- **Browser-automation MCP** — *optional*: for screenshot evidence on UI phases (`goal-verify` detects it by description). Missing → UI phases escalate (can't capture evidence); API/CLI phases use run-log evidence.
+- **Cloudflare / deploy MCP** — *optional*: deploys are never automatic. Wire a Cloudflare MCP you supply, or the plugin prints the deploy command for you to run. Real-money deploys, secret use, and commits are always human-gated.
+- **Web search** — research agents use built-in WebSearch/WebFetch. No external API keys, no inline secrets (authoring Rules 1–2).
+- Workspace created in the cwd you confirm: `docs/` (backlog, research, diary) + one git repo per idea.
 
 ## Troubleshooting
 

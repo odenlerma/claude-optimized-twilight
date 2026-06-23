@@ -35,6 +35,8 @@ Editing a plugin: bump `version` in its `plugin.json` before committing if behav
 
 Adding or editing a plugin: update `README.md` (install, usage, dependencies) in the same change. Caveman lite.
 
+Authoring prompt text (SKILL.md, commands, agents): follow [`.claude/rules/prompting-best-practices.md`](.claude/rules/prompting-best-practices.md) (plugin-authoring Rule 11) alongside caveman lite — clear intent, context/motivation, examples in `<example>` tags when format matters, XML structure, no over-prompting. Rewrite a weak prompt with the `prompt-rewrite` skill (`prompt-craft` plugin).
+
 Always run `/validate` before committing changes to `marketplace.json` or any `plugin.json`.
 
 ## Installing this marketplace

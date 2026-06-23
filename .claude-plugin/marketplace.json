@@ -3,7 +3,7 @@
   "description": "Personal Claude Code plugin marketplace",
   "metadata": {
     "description": "Anthropic example skills",
-    "version": "7.0.0"
+    "version": "8.1.1"
   },
   "owner": {
     "name": "Audruey Gana",
@@ -39,6 +39,21 @@
       "name": "vibe-coding-essentials",
       "source": "./plugins/vibe-coding-essentials",
       "description": "Guardrails for AI-assisted rapid coding — PostToolUse scanners for secrets/security/format/types on every edit, five reusable rulesets (security, clean-code, git, testing, project-setup) loadable per session, plus on-demand secret-scan, security-audit, and refactor-plan skills."
+    },
+    {
+      "name": "dev-assessment",
+      "source": "./plugins/dev-assessment",
+      "description": "Turn an existing Jira ticket into an engineering scoping assessment — check ticket info is sufficient (always ask the human when not), scan the whole workspace not just one repo, write a caveman-lite assessment (complexity, affected code & repos, approach, risks, open questions), and post it to Jira only after human approval."
+    },
+    {
+      "name": "prompt-craft",
+      "source": "./plugins/prompt-craft",
+      "description": "Diagnose a weak prompt and rewrite it to Anthropic's prompt-engineering best practices — clarity, context/motivation, examples in <example> tags, XML structure, role, tell-what-to-do framing, calibrated thinking/tool/agentic guidance — without over-prompting or redesigning the task; outputs before/after plus what changed and why."
+    },
+    {
+      "name": "idea-creator",
+      "source": "./plugins/idea-creator",
+      "description": "Drive a raw idea to shipped, tested software through a research-gated pipeline — capture ideas in a backlog, run each through parallel research agents (market, usefulness, architecture, compliance, feasibility) to an explicit build/kill gate, scaffold a per-idea git repo, author a phased PRD, build each phase to verified-with-evidence, then marketing and human handover; progress tracked as a resumable diary that loops across ideas until every idea is completed or killed."
     }
   ]
 }
