@@ -67,3 +67,6 @@ Plugin hooks go in `plugins/<plugin>/hooks/hooks.json`. Never user/project `sett
 **Security:** validate stdin, quote `"$VAR"`, no secrets (Rule 2), absolute paths via `${CLAUDE_PLUGIN_ROOT}`, skip `.env`/`.git`.
 
 Full reference: https://code.claude.com/docs/en/hooks
+
+## 11. Prompt text follows prompting-best-practices
+SKILL.md, command, and agent prompt text follows [`prompting-best-practices.md`](prompting-best-practices.md): clear intent + explicit success criteria, context/motivation behind hard instructions, tell-what-to-do framing, 3–5 `<example>`-tagged examples when format matters, XML structure for mixed content, role only when it sharpens output, no over-prompting (no gratuitous CRITICAL/MUST or "always use X" — current models overtrigger), scaffolding calibrated to the prompt's job. Works with Rule 6 (caveman lite): concise but not vague. Rewrite a weak prompt with the `prompt-rewrite` skill (`prompt-craft` plugin).
